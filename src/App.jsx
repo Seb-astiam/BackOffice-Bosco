@@ -1,17 +1,25 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import { Card } from '@tremor/react';
+import { Route, Routes } from "react-router-dom";
+import { Login } from "./views/Login";
+import { Inicio } from "./views/Inicio";
 
+import Modal from 'react-modal';
 
-function App() {
-  const [count, setCount] = useState(0)
+Modal.setAppElement('#root');
+const App = () => {
 
   return (
-    <>
-   <Card/>
-    </>
+    <div> 
+      <Inicio />
+       <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/inicio/*" element={<Inicio />} />
+      
+      </Routes>
+      
+      
+    </div>  
+    
   )
 }
 
-export default App
+export default App;
