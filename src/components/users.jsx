@@ -2,38 +2,74 @@ import { useSelector } from "react-redux";
 import { useUsers } from "../hooks/useUser"
 import { List, ListItem } from '@tremor/react';
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { btn } from "../estilos/estilosLogin";
+import Swal from 'sweetalert2'
+
 
 export const Users = () => {
   useUsers();
   const usuarios = useSelector((state) => state.storage.allUsers);
 
-  const [mensajeConfirmacion, setMensajeConfirmacion]= useState(false)
+  const [input, setInput] = useState({
+    block: false,
+    email: ''
+  })
 
-  const clickFunction = async (email) => {
+  const clickFunction = async (e) => {
+    const { value, name } = e.target;
+  
     try {
-      const { data } = await axios.delete(`/user/${email}`);
-      useUsers();
-      setMensajeConfirmacion(true)
-      
+      setInput(prevState => ({
+        ...prevState,
+        [name]: value
+      }));
+  
     } catch (error) {
       window.alert('Error al eliminar usuario');
-      return console.error(error)
+      console.error(error);
     }
   }
+  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.put(`/user/status`, input, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+  
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: data,
+          showConfirmButton: false,
+          timer: 1500
+        });
+  
+        setInput({
+          block: false,
+          email: ''
+        });
+      } catch (error) {
+        window.alert('Error al eliminar usuario');
+        console.error(error);
+      }
+    };
+  
+    if (input.email) {
+      fetchData();
+    }
+  }, [input.email]);
 
-  // useEffect(() => {
-  //   if (mensajeConfirmacion) {
-  //     useUsers();
-  //   }
-  // }, [mensajeConfirmacion])
+
 
     return (
-      <div className="bg-blue-200 w-[90%] flex justify-center items-start"> 
-        <div className="flex flex-col justify-center items-center gap-2 w-[450px] ">
+      <div className="bg-blue-200 w-[80%] flex justify-center items-start"> 
+        <div className="flex flex-col justify-center items-center gap-2 w-[800px] ">
           { usuarios.map((usuario) => {
-              const {name, email, id } = usuario
+              const {name, email, id, status } = usuario
             return <div className="flex w-full gap-5" key={id}>
               <List > 
                 <ListItem className="text-black">
@@ -42,20 +78,34 @@ export const Users = () => {
                 </ListItem>
               </List>
 
-              <button onClick={() => clickFunction(email)} className={btn}>Eliminar</button>
+              <List > 
+                <ListItem className="text-black">
+                <span>{status? "Activo" : "Bloqueado"}</span>
+                </ListItem>
+              </List>
+
+
+              <button
+                onClick={(e) => clickFunction(e)}
+                value={email}
+                name="email"
+                className={`${btn} ${status ? "" : "bg-gray-300 cursor-not-allowed"}`}
+                disabled={!status}
+              >
+                Bloquear
+              </button>
+              <button
+                onClick={(e) => clickFunction(e)}
+                value={email}
+                name="email"
+                className={`${btn} ${!status ? "" : "bg-gray-300 cursor-not-allowed"}`}
+                disabled={status}
+              >
+                Desbloquear
+              </button>
             </div>
           })}
         </div>
-
-        <div className={`${mensajeConfirmacion? 'bg-[rgba(0,_0,_0,_0.5)] ' : '-translate-y-[500%]'} w-screen h-screen flex justify-center items-center absolute`}>
-          <div className= {`${mensajeConfirmacion? '' : '-translate-y-[500%]'} flex flex-col items-center rounded-[20px] absolute h-[450px] w-[400px] text-xl bg-[#eee] max-w-[450px]`}>
-              <h1>Usuario</h1>
-              <h3>Eliminado Correctamente</h3>
-
-              <button onClick={()=> setMensajeConfirmacion(false)} className={btn}>cerrar</button>
-          </div>
-        </div>
-
       </div>  
     )
 }

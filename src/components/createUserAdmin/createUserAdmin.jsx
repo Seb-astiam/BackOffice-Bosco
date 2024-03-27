@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { RiUser3Line, RiMailLine, RiLock2Line  } from "@remixicon/react";
-import { isValidUsername, isValidEmail, isValidPassword, isValidPasswordConfirmation } from "./validaciones";
+import { isValidUsername, isValidEmail, isValidPassword, isValidPasswordConfirmation } from "./validacionesUserAdmin";
 import Swal from 'sweetalert2'
+import axios from "axios";
 
 
 export const CreateUserAdmin = () => {
