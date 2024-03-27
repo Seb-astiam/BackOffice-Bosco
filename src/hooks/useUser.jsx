@@ -10,7 +10,7 @@ export const useUsers = () => {
     useEffect(() => {  
         const peticionBack = async () => {
             try {
-                const responseBack = await axios.get("http://localhost:3001/user");
+                const responseBack = await axios.get("/user");
                 dispatch(getAllUsers(responseBack.data));
             } 
             catch (error) {

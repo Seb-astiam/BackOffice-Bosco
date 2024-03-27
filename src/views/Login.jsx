@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 import {
     containter100vh,
@@ -19,6 +20,8 @@ export const Login = () => {
         email: '',
         password: ''
     });
+
+    const [loggedInUser, setLoggedInUser] = useLocalStorage("loggedInUser", null);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -41,7 +44,7 @@ export const Login = () => {
         try {
             const sendBack = await axios.post("http://localhost:3001/loginBackOffice", input);
             if (sendBack.status === 200) {
-                console.log('Datos enviados con éxito', input);
+                setLoggedInUser(input.email); 
                 setInput({
                     email: '',
                     contraseña: ''
