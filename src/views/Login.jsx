@@ -42,14 +42,14 @@ export const Login = () => {
         e.preventDefault();
 
         try {
-            const sendBack = await axios.post("http://localhost:3001/loginBackOffice", input);
+            const sendBack = await axios.post("/loginBackOffice", input);
             if (sendBack.status === 200) {
                 setLoggedInUser(input.email); 
                 setInput({
                     email: '',
                     contraseña: ''
                 });
-                navigate('/inicio');
+                navigate('/usuarios');
             } else {
                 console.log('Acceso Denegado');
             }
