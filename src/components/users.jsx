@@ -7,9 +7,43 @@ import { btn } from "../estilos/estilosLogin";
 import Swal from 'sweetalert2'
 
 
+import { BarChart } from '@tremor/react';
+
+
 export const Users = () => {
+
   useUsers();
   const usuarios = useSelector((state) => state.storage.allUsers);
+
+
+  const usuariosActivos = usuarios.filter(usuario => usuario.status === true);
+const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
+
+
+  
+  const chartdata = [
+    {
+      name: 'Usuarios',
+      Totales: usuarios.length,
+    },
+    {
+      name: 'Usuarios activos',
+      Totales: usuariosActivos.length,
+    },
+    {
+      name: 'Usuarios bloqueados',
+      Totales: usuariosBloqueados.length,
+    }
+  ]
+  
+  const dataFormatter = (number) =>
+  new Intl.NumberFormat('us').format(number).toString();
+
+
+
+
+
+
 
   const [input, setInput] = useState({
     block: false,
@@ -52,6 +86,10 @@ export const Users = () => {
           block: false,
           email: ''
         });
+
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 1500); 
       } catch (error) {
         window.alert('Error al eliminar usuario');
         console.error(error);
@@ -66,11 +104,13 @@ export const Users = () => {
 
 
     return (
-      <div className="bg-blue-200 w-[80%] flex justify-center items-start"> 
-        <div className="flex flex-col justify-center items-center gap-2 w-[800px] ">
+      <div className="bg-blue-200 w-[80%] flex flex-col justify-start items-start p-3"> 
+        <div className="flex flex-col justify-center items-center w-[900px] border border-black bg-white">
+
+          <h1 className="font-mono">Tabla de usuarios</h1>
           { usuarios.map((usuario) => {
               const {name, email, id, status } = usuario
-            return <div className="flex w-full gap-5" key={id}>
+            return <div className="flex w-full gap-8 items-center border border-black border-l-0 border-r-0 p-2" key={id}>
               <List > 
                 <ListItem className="text-black">
                   <span>{name}</span>
@@ -79,7 +119,7 @@ export const Users = () => {
               </List>
 
               <List > 
-                <ListItem className="text-black">
+                <ListItem className={`${status ? 'bg-green-800 ' : 'bg-red-800 '} text-white px-3 w-24 rounded`}>
                 <span>{status? "Activo" : "Bloqueado"}</span>
                 </ListItem>
               </List>
@@ -106,6 +146,18 @@ export const Users = () => {
             </div>
           })}
         </div>
+
+          <BarChart
+            className="mt-6 bg-white"
+            data={chartdata}
+            index="name" 
+            categories={['Totales']} 
+            colors={['orange']}
+            valueFormatter={dataFormatter}
+            yAxisWidth={48}
+          />
+
+
       </div>  
     )
 }
