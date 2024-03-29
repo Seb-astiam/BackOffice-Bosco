@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 
 
 import { BarChart } from '@tremor/react';
+import { NavLink } from "react-router-dom";
 
 
 export const Users = () => {
@@ -124,6 +125,7 @@ const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
                 </ListItem>
               </List>
 
+              <button><NavLink to={`/usuarios/detalle/${email}`}>Detalle</NavLink></button>
 
               <button
                 onClick={(e) => clickFunction(e)}
