@@ -4,7 +4,7 @@ import { Users } from "../components/users";
 import { Route, Routes } from "react-router-dom";
 import { PanelUsuario } from "../components/panelUsuario";
 import { CreateUserAdmin } from "../components/createUserAdmin/createUserAdmin";
-import Services from "../components/services/Services";
+import { Services } from "../components/services /Services";
 import { Detalle } from "./detalle";
 
 export const Inicio = () => {
@@ -15,7 +15,7 @@ export const Inicio = () => {
 
         <div className="flex w-full">
           <SideBar />
-          <div className="flex flex-col items-center  w-full lg:ml-8 p-2 mt-10"> {/* Agrega margen a la izquierda solo en pantallas grandes */}
+          <div className="flex flex-col items-center w-full">
             <Routes>
               <Route path="/" element={<Users />} />
               <Route path="/panel-de-usuario" element={<PanelUsuario />} />

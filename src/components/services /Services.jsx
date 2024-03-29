@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 
-const Services = () => {
+export const Services = () => {
   const [services, setServices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newServiceName, setNewServiceName] = useState({ type: "" });
@@ -244,5 +244,4 @@ const Services = () => {
   );
 };
 
-export default Services;
 
