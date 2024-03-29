@@ -3,8 +3,6 @@ import axios from "axios";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 
-const URL = "http://localhost:3001";
-
 const Services = () => {
   const [services, setServices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -21,7 +19,7 @@ const Services = () => {
   const fetchServices = async () => {
     try {
       const response = await axios.get(
-        `${URL}/service/allServices?page=${currentPage}&limit=${servicesPerPage}`
+        `/service/allServices?page=${currentPage}&limit=${servicesPerPage}`
       );
       setServices(response.data);
     } catch (error) {
@@ -39,7 +37,7 @@ const Services = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`${URL}/service/service/${id}`);
+      const response = await axios.delete(`/service/${id}`);
       if (response.status === 200) {
         setServices((prevServices) =>
           prevServices.filter((service) => service.id !== id)
@@ -61,7 +59,7 @@ const Services = () => {
       let response;
       if (actionType === "create") {
         response = await axios.post(
-          `${URL}/service/newService`,
+          `/service/newService`,
           newServiceName
         );
         Swal.fire({
@@ -71,7 +69,7 @@ const Services = () => {
         });
       } else if (actionType === "update") {
         response = await axios.put(
-          `${URL}/service/service/${selectedService.id}`,
+          `/service/${selectedService.id}`,
           newServiceName
         );
         Swal.fire({
