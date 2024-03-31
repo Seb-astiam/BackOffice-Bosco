@@ -3,6 +3,7 @@ import { Login } from "./views/Login";
 import { Inicio } from "./views/Inicio";
 
 import Modal from 'react-modal';
+import { PrivateRoute } from "./components/privateRoute";
 
 Modal.setAppElement('#root');
 const App = () => {
@@ -11,7 +12,11 @@ const App = () => {
     <div> 
        <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/usuarios/*" element={<Inicio />} />
+        <Route path="/usuarios/*" element={
+          <PrivateRoute>
+            <Inicio />
+          </PrivateRoute>
+        } />
       
       </Routes>
       
