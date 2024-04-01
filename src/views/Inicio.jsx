@@ -4,7 +4,7 @@ import { Users } from "../components/users";
 import { Route, Routes } from "react-router-dom";
 import { PanelUsuario } from "../components/panelUsuario";
 import { CreateUserAdmin } from "../components/createUserAdmin/createUserAdmin";
-import { Services } from "../components/services /Services";
+import { Services } from "../components/services/Services";
 import { Detalle } from "./detalle";
 
 export const Inicio = () => {
