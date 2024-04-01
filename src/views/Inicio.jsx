@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import { PanelUsuario } from "../components/panelUsuario";
 import { CreateUserAdmin } from "../components/createUserAdmin/createUserAdmin";
 import { Services } from "../components/services/Services";
+import Housings from "../components/housing/housings";
 import { Detalle } from "./detalle";
 
 export const Inicio = () => {
@@ -21,6 +22,7 @@ export const Inicio = () => {
               <Route path="/panel-de-usuario" element={<PanelUsuario />} />
               <Route path="/registro" element={<CreateUserAdmin  />} />
               <Route path="/services/operations" element={<Services />} />
+              <Route path="/alojamientos/ver" element={<Housings />} />
               <Route path="/detalle/:email" element={<Detalle />} />
             </Routes>
           </div>
