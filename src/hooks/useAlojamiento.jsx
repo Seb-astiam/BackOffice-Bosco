@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useDispatch } from "react-redux"
-import { getAllUsers } from "../redux/boscoSlice";
+import { getAllAlojamientos } from "../redux/boscoSlice";
 import axios from "axios";
 
 
-export const useUsers = () => {
+export const useAlojamiento= () => {
     const dispatch = useDispatch();
 
     useEffect(() => {  
         const peticionBack = async () => {
             try {
-                const responseBack = await axios.get("/user");
-                dispatch(getAllUsers(responseBack.data));
+                const responseBack = await axios.get("/profileHousing/filtered");
+                dispatch(getAllAlojamientos(responseBack.data));
             } 
             catch (error) {
               console.error("Algo falló en la petición a mi Backend", error);
