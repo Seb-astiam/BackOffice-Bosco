@@ -8,29 +8,32 @@ import { useAlojamiento } from "../../hooks/useAlojamiento";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getAllAlojamientos } from "../../redux/boscoSlice";
-// import { useLocationProvincias } from "../../hooks/useLocationProvincias";
+import { useLocationProvincias } from "../../hooks/useLocationProvincias";
 // import { useServices } from "../../hooks/useServices";
+
 const Housings = () => {
   const dispatch = useDispatch();
   useAlojamiento();
+  useLocationProvincias();
+
   const statehousings = useSelector((state) => state.storage.allAlojamientos);
   const provincias = useSelector((state) => state.storage.AllLocation);
   const services = useSelector((state) => state.storage.AllService);
+
   useEffect(() => {
     setHousingData(statehousings);
   }, [statehousings]);
 
   const [housingData, setHousingData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
   const [selectedHousing, setSelectedHousing] = useState(null);
   
 
   const reloadHousingsData = async () => {
     try {
       const response = await axios.get("/profileHousing/filtered");
+
       dispatch(getAllAlojamientos(response.data));
     } catch (error) {
       console.error("Error al recargar los alojamientos:", error);

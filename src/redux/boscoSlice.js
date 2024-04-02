@@ -28,6 +28,6 @@ const boscoSlice = createSlice({
   },
 });
 
-export const { getAllUsers,getAllLocation, getAllService,  getAllAlojamientos } = boscoSlice.actions;
+export const { getAllUsers, getAllLocation, getAllService,  getAllAlojamientos } = boscoSlice.actions;
 
 export default boscoSlice.reducer;

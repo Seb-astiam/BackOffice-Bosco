@@ -355,7 +355,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/alojamientos/ver"
+                to="/usuarios/alojamientos/ver"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Ver Alojamientos
@@ -406,7 +406,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/reservas/ver"
+                to="/usuarios/reservas/ver"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Ver Reservas
@@ -456,7 +456,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/services/operations"
+                to="/usuarios/services/operations"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Operaciones Servicios
@@ -464,7 +464,7 @@ export const SideBar = () => {
             </li>
             <li>
               <Link
-                to="/servicios/reportes"
+                to="/usuarios/servicios/reportes"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Reportes
