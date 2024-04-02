@@ -97,42 +97,61 @@ export const CreateUserAdmin = () => {
           }
     }
 
+    const handleClear = () => {
+        setInput({
+            name: "",
+            email: "",
+            password: "",
+            passwordConfirmation: ""
+        });
+
+        setInputError({
+            name: { valid: false, error: '' },
+            email: { valid: false, error: '' },
+            password: { valid: false, error: '' },
+            passwordConfirmation: { valid: false, error: '' }
+        });
+    }
+
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label className="flex items-center">
-                    <RiUser3Line />
-                    <input placeholder="Nombre" name="name" value={input.name} onChange={handleChange} ></input>
-                </label>
-            </div>
-            <p className="font-custom font-semibold w-[100%] text-center text-[12px] text-[#852727]">{inputError.name.error}</p>
+        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 h-[80%] w-[70%] flex flex-col gap-3 items-center justify-center">
 
-            <div>
-                <label className="flex items-center">
-                    <RiMailLine />
-                    <input placeholder="Correo"  name="email" value={input.email} onChange={handleChange} ></input>
-                </label>
-            </div>
-            <p className="font-custom font-semibold w-[100%] text-center text-[12px] text-[#852727]">{inputError.email.error}</p>
+            <h1 className="text-3xl font-serif w-[400px] text-center bg-blue-100 shadow mb-5 p-2 rounded">Formulario para registrar usuarios</h1>
 
-            <div>
-                <label className="flex items-center">
-                    <RiLock2Line />
-                    <input placeholder="Contraseña" name="password" value={input.password} onChange={handleChange} ></input>
-                </label>
-            </div>
-            <p className="font-custom font-semibold w-[100%] text-center text-[12px] text-[#852727]">{inputError.password.error}</p>
+        <div className="mb-4">
+            <label className="flex items-center">
+                <RiUser3Line className="mr-2" />
+                <input placeholder="Nombre" name="name" value={input.name} onChange={handleChange} className="border-b-2 border-gray-300 hover:scale-105 focus:border-blue-500 focus:outline-none" />
+            </label>
+            <p className="text-red-500 text-xs italic">{inputError.name.error}</p>
+        </div>
 
-            <div>
-                <label className="flex items-center">
-                    <RiLock2Line />
-                    <input placeholder="Repetir contraseña" name="passwordConfirmation" value={input.passwordConfirmation} onChange={handleChange} ></input>
-                </label>
-            </div>
-            <p className="font-custom font-semibold w-[100%] text-center text-[12px] text-[#852727]">{inputError.passwordConfirmation.error}</p>
+        <div className="mb-4">
+            <label className="flex items-center">
+                <RiMailLine className="mr-2" />
+                <input placeholder="Correo" name="email" value={input.email} onChange={handleChange} className="border-b-2 border-gray-300 hover:scale-105 focus:border-blue-500 focus:outline-none" />
+            </label>
+            <p className="text-red-500 text-xs italic">{inputError.email.error}</p>
+        </div>
 
-            <button>Registrar</button>
+        <div className="mb-4">
+            <label className="flex items-center">
+                <RiLock2Line className="mr-2" />
+                <input placeholder="Contraseña" type="password" name="password" value={input.password} onChange={handleChange} className="border-b-2 hover:scale-105 border-gray-300 focus:border-blue-500 focus:outline-none" />
+            </label>
+            <p className="text-red-500 text-xs italic">{inputError.password.error}</p>
+        </div>
 
-        </form>
+        <div className="mb-4">
+            <label className="flex items-center">
+                <RiLock2Line className="mr-2" />
+                <input placeholder="Repetir contraseña" type="password" name="passwordConfirmation" value={input.passwordConfirmation} onChange={handleChange} className="border-b-2 hover:scale-105 border-gray-300 focus:border-blue-500 focus:outline-none" />
+            </label>
+            <p className="text-red-500 text-xs italic">{inputError.passwordConfirmation.error}</p>
+        </div>
+
+        <button type="button" onClick={handleClear} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Limpiar</button>
+        <button type="submit" className="bg-gray-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Registrar</button>
+    </form>
     )
 }

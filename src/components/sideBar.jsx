@@ -375,7 +375,7 @@ export const SideBar = () => {
                 style={{ right: 0 }}
               >
                 <li>
-                  <Link to="/" className="block py-2 px-12 hover:bg-gray-700">
+                  <Link to="/ocupancy" className="block py-2 px-12 hover:bg-gray-700">
                     Ocupación por Ubicación
                   </Link>
                 </li>

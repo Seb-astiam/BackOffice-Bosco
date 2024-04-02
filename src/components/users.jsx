@@ -8,6 +8,7 @@ import Swal from 'sweetalert2'
 
 
 import { BarChart } from '@tremor/react';
+import { NavLink } from "react-router-dom";
 
 
 export const Users = () => {
@@ -104,48 +105,60 @@ const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
 
 
     return (
-      <div className="bg-blue-200 w-[80%] flex flex-col justify-start items-start p-3"> 
-        <div className="flex flex-col justify-center items-center w-[900px] border border-black bg-white">
-
-          <h1 className="font-mono">Tabla de usuarios</h1>
-          { usuarios.map((usuario) => {
-              const {name, email, id, status } = usuario
-            return <div className="flex w-full gap-8 items-center border border-black border-l-0 border-r-0 p-2" key={id}>
-              <List > 
-                <ListItem className="text-black">
-                  <span>{name}</span>
-                  <span>{email}</span>
-                </ListItem>
-              </List>
-
-              <List > 
-                <ListItem className={`${status ? 'bg-green-800 ' : 'bg-red-800 '} text-white px-3 w-24 rounded`}>
-                <span>{status? "Activo" : "Bloqueado"}</span>
-                </ListItem>
-              </List>
-
-
-              <button
-                onClick={(e) => clickFunction(e)}
-                value={email}
-                name="email"
-                className={`${btn} ${status ? "" : "bg-gray-300 cursor-not-allowed"}`}
-                disabled={!status}
-              >
-                Bloquear
-              </button>
-              <button
-                onClick={(e) => clickFunction(e)}
-                value={email}
-                name="email"
-                className={`${btn} ${!status ? "" : "bg-gray-300 cursor-not-allowed"}`}
-                disabled={status}
-              >
-                Desbloquear
-              </button>
-            </div>
-          })}
+      <div className="bg-blue-200 w-full flex flex-col justify-start items-start p-3"> 
+        <div className="flex flex-col justify-center items-center border border-black bg-white w-[900px]">
+          <h1 className="font-bold bg-blue-800 text-white text-3xl py-5 w-full h-full text-center">Tabla de usuarios</h1>
+          <table className="w-full border-collapse border border-black">
+            <thead>
+              <tr>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Nombre</th>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Correo</th>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Estado</th>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Detalle</th>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Bloquear</th>
+                <th className="px-4 py-2 border border-black bg-blue-300 text-black">Desbloquear</th>
+              </tr>
+            </thead>
+            <tbody className="bg-blue-100 font-bold">
+              {usuarios.map((usuario) => {
+                const { name, email, id, status } = usuario;
+                return (
+                  <tr key={id} className="border border-black">
+                    <td className="px-4 py-2 border border-black">{name}</td>
+                    <td className="px-4 py-2 border border-black">{email}</td>
+                    <td className={`px-4 py-2 border border-black ${status ? 'bg-green-600 text-white' : 'bg-red-600 text-white'}`}>
+                      {status ? "Activo" : "Bloqueado"}
+                    </td>
+                    <td className="px-4 py-2 border border-black">
+                      <button className="bg-gray-950 hover:bg-gray-200 hover:text-black text-white font-bold py-2 px-4 rounded">
+                      <NavLink to={`/usuarios/detalle/${email}`}>Detalle..</NavLink>
+                      </button>
+                    </td>
+                    <td className={`px-4 py-2 border border-black`}>
+                      <button onClick={clickFunction} className={`${btn} ${status ? "hover:bg-blue-100 hover:text-black" : "bg-gray-300 cursor-not-allowed"}`}
+                      value={email}
+                      name="email"
+                      disabled={!status}
+                      >
+                        Bloquear
+                      </button>
+                    </td>
+                    <td className={`px-4 py-2 border border-black`}>
+                      <button onClick={clickFunction} className={`${btn} ${!status ? "hover:bg-blue-100 hover:text-black" : "bg-gray-300 cursor-not-allowed"}`}
+                      value={email}
+                      name="email"
+                      disabled={status}
+                      >
+                        Desbloquear
+                      </button>
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
+
 
           <BarChart
             className="mt-6 bg-white"
