@@ -71,6 +71,8 @@ export const Login = () => {
 
     return (
         <div className={containter100vh}> 
+
+        <h1 className="m-[30px]">DashBoard Bosco</h1>
             <form onSubmit={handleSubmit} className={form}>
                 
                 <h1 className={h1}>Inicio de sesión</h1>
