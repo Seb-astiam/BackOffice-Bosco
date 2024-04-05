@@ -7,7 +7,7 @@ import { btn } from "../estilos/estilosLogin";
 import Swal from 'sweetalert2'
 
 
-import { BarChart } from '@tremor/react';
+
 import { NavLink } from "react-router-dom";
 
 
@@ -22,23 +22,9 @@ const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
 
 
   
-  const chartdata = [
-    {
-      name: 'Usuarios',
-      Totales: usuarios.length,
-    },
-    {
-      name: 'Usuarios activos',
-      Totales: usuariosActivos.length,
-    },
-    {
-      name: 'Usuarios bloqueados',
-      Totales: usuariosBloqueados.length,
-    }
-  ]
   
-  const dataFormatter = (number) =>
-  new Intl.NumberFormat('us').format(number).toString();
+  
+ 
 
 
 
@@ -120,7 +106,7 @@ const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
               </tr>
             </thead>
             <tbody className="bg-blue-100 font-bold">
-              {usuarios.map((usuario) => {
+              { usuarios && usuarios.map((usuario) => {
                 const { name, email, id, status } = usuario;
                 return (
                   <tr key={id} className="border border-black">
@@ -160,17 +146,13 @@ const usuariosBloqueados = usuarios.filter(usuario => usuario.status === false);
         </div>
 
 
-          <BarChart
-            className="mt-6 bg-white"
-            data={chartdata}
-            index="name" 
-            categories={['Totales']} 
-            colors={['orange']}
-            valueFormatter={dataFormatter}
-            yAxisWidth={48}
-          />
+         
 
 
       </div>  
+
+
+
+
     )
 }

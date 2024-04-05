@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getAllAlojamientos } from "../../redux/boscoSlice";
 import { useLocationProvincias } from "../../hooks/useLocationProvincias";
+
 // import { useServices } from "../../hooks/useServices";
 
 const Housings = () => {
@@ -76,26 +77,6 @@ const Housings = () => {
 
  
 
-  // const handleChange = (e) => {
-  //   setSearchQuery(e.target.value);
-  // };
-
-  // const handleChange = async (e) => {
-  //   const changeFilter = { ...filter, [e.target.name]: e.target.value };
-  //   setFilter(changeFilter);
-  //   let query = "?";
-
-  //   for (const [key, value] of Object.entries(changeFilter)) {
-  //     if (value) query += `${key}=${value}&`;
-  //   }
-
-  //   try {
-  //     const { data } = await axios.get(URL + query);
-  //     dispatch(getAllAlojamientos(data));
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setSearchQuery({ ...searchQuery, [name]: value });
@@ -230,7 +211,9 @@ const Housings = () => {
                         </th>
                         <th className="px-2 py-2 text-sm">Tipo</th>
                         <th className="px-2 py-2 text-sm">Precio</th>
-                        <th className="px-2 py-2 text-sm">Ubicación</th>
+                        <th className="px-2 py-2 text-sm">Provincia</th>
+                        <th className="px-2 py-2 text-sm">Localidad</th>
+
                         <th className="px-2 py-2 text-sm">Plazas</th>
                         <th className="px-2 py-2 text-sm">Disponibilidad</th>
                         <th className="px-2 py-2 text-sm">
@@ -279,7 +262,10 @@ const Housings = () => {
                               {housing.price}
                             </td>
                             <td className="border px-1 py-0.3 text-sm w-20 mt-1">
-                              {housing.location}
+                              {housing.provinces}
+                            </td>
+                            <td className="border px-1 py-0.3 text-sm w-20 mt-1">
+                              {housing.cities}
                             </td>
                             <td className="border px-1 py-0.3 text-sm w-20 mt-1">
                               {housing.square}

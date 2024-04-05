@@ -6,6 +6,7 @@ import Modal from "react-modal";
 import { ValidateFormdata } from "./validate";
 import { useLocationProvincias } from "../../hooks/useLocationProvincias";
 import { useServices } from "../../hooks/useServices";
+import useCities from "../../hooks/useCities";
 // import { useAlojamiento } from "../../hooks/useAlojamiento";
 
 import { useSelector } from "react-redux";
@@ -33,6 +34,8 @@ const Modals = ({
       setFormData({
         id:  result.id,
         title:  result.title,
+        provinces: result.provinces,
+        cities: result.cities,
         location:  result.location,
         datesAvailable:  result.datesAvailable,
         datesEnd:  result.datesEnd,
@@ -43,7 +46,7 @@ const Modals = ({
         services: selectedServiceIds,
       });
     }
-  }, [ selectedHousing]);
+  }, [ result]);
 
   // useEffect(() => {
   //   if (actionType === "edit" && selectedHousingData) {
@@ -53,14 +56,17 @@ const Modals = ({
 
   useServices();
   useLocationProvincias();
+  useCities();
   const provincias = useSelector((state) => state.storage.AllLocation);
   const servicesA = useSelector((state) => state.storage.AllService);
+  
 
-  const email = "Hectortrivia@gmail.com"; //ACA ESTAS
+  const email = "Hectortrivia1@gmail.com"; //ACA ESTAS
   const [formData, setFormData] = useState({
     id:'',
     title: "",
-    location: "",
+    provinces: "",
+    cities: "",
     datesAvailable: "",
     datesEnd: "",
     price: "",
@@ -73,45 +79,13 @@ const Modals = ({
   useEffect(() => {
     console.table("Form Data:", formData);
   }, [formData]);
-
+  const selectedProvince = formData.provinces;
+  const cities = useCities(selectedProvince ? selectedProvince : null);
   const [disableSubmit, setDisableSubmit] = useState(true);
 
   const [errors, setErrors] = useState({});
 
-  // const handleChange = (e) => {
-  //   const { name, files, type, checked } = e.target;
-
-  //   let newValue;
-
-  //   if (name === "images") {
-  //     newValue = [
-  //       ...formData.images,
-  //       ...Array.from(files).slice(0, 3 - formData.images.length),
-  //     ];
-  //   } else if (type === "checkbox") {
-  //     newValue = checked
-  //       ? [...formData.services, e.target.value]
-  //       : formData.services.filter((service) => service !== e.target.value);
-  //   } else {
-  //     newValue = e.target.value;
-  //   }
-
-  //   setFormData((prevData) => ({
-  //     ...prevData,
-  //     [name]: newValue,
-  //   }));
-
-  //   const validationErrors = ValidateFormdata({
-  //     ...formData,
-  //     [name]: newValue,
-  //   });
-
-  //   setErrors(validationErrors);
-  //   const errorMessages = Object.values(errors);
-  //   setDisableSubmit(errorMessages.some((ermsg) => ermsg !== ""));
-  // };
-
-
+ 
   const handleChange = (e) => {
     const { name, files, type, checked } = e.target;
   
@@ -175,58 +149,36 @@ const Modals = ({
     e.preventDefault();
  
 
-    // const formDataToSend = new FormData();
-   
-
-    // for (const key of Object.keys(formData)) {
-    //   const value = formData[key];
- 
-    //   if (key === "images") {
-    //     value.forEach((image) => formDataToSend.append("images", image));
-        
-    //   } else {
-    //     formDataToSend.append(key, value);
-    //   }
-    // }
-
-    const formDataTo = new FormData();
-
-        // Verificar los datos de formData antes de agregar datos
-        console.log('Tamaño de formData antes de agregar datos:', formData.size);
-        console.log('Contenido de formData:', formData);
-        
-        // Recorrer todas las claves y valores del estado formData
-        for (const [key, value] of Object.entries(formData)) {
-          // Asegurarse de que el bucle se esté ejecutando
-          console.log('Bucle ejecutándose');
-        
-          // Imprimir la clave y el valor dentro del bucle
-          console.log('Key:', key, 'Value:', value);
-        
-          // Si la clave es "images", agrega cada imagen individualmente al FormData
-          if (key === "images") {
-            value.forEach((image) => formDataTo.append("images", image));
-          }else if (key === "Services") {
-            const serviceIds = value.map(service => service.id);
-            formDataTo.append("ServiceIds", JSON.stringify(serviceIds));
-          } else {
-            // De lo contrario, agrega la clave y el valor al FormData
-            formDataTo.append(key, value);
-          }
-        }
-        
-        // Verificar el tamaño y el contenido de formDataTo después de agregar datos
-        console.log('Tamaño de formDataTo después de agregar datos:', formDataTo.length);
-        console.log('Contenido de formDataTo:', formDataTo);
     
-  
 
+   // Verificar si hay nuevas imágenes seleccionadas por el usuario
+const newImagesSelected = formData.images.some(image => typeof image !== 'string');
+console.log('¿Nuevas imágenes seleccionadas?', newImagesSelected);
 
+// Crear un nuevo objeto FormData
+const formDataTo = new FormData();
 
+// Recorrer todas las claves y valores del estado formData
+for (const [key, value] of Object.entries(formData)) {
+  console.log('Clave:', key, 'Valor:', value);
+  if (key === "images" && newImagesSelected) {
+    // Si hay nuevas imágenes seleccionadas, agregarlas al FormData
+    console.log('Agregando nuevas imágenes al FormData:', value);
+    value.forEach(image => formDataTo.append("images", image));
+  } else if (key === "Services") {
+    // Convertir los IDs de los servicios a una cadena JSON y agregarlos al FormData
+    console.log('Convirtiendo IDs de servicios a JSON y agregándolos al FormData:', value);
+    const serviceIds = value.map(service => service.id);
+    formDataTo.append("ServiceIds", JSON.stringify(serviceIds));
+  } else {
+    // De lo contrario, agregar la clave y el valor al FormData
+    console.log('Agregando clave y valor al FormData:', key, value);
+    formDataTo.append(key, value);
+  }
+}
 
-
-
-    try {
+console.log('FormData después de la configuración:', formDataTo);
+ try {
       let response;
 
       if (actionType === "create") {
@@ -249,11 +201,14 @@ const Modals = ({
         }
 
         
-      } else if (actionType === "edit" ) {
+      } 
+   if (actionType === "edit" ) {
        
         
-        const  response1 = await axios.post(
+        const  response1 = await axios.put(
           `/profileHousing/update/${result.id}`, formDataTo
+            
+          
          
         
          
@@ -284,7 +239,8 @@ const Modals = ({
   const clearFormData = () => {
     setFormData({
       title: "",
-      location: "",
+     cities: "",
+     provinces:'',
       datesAvailable: "",
       datesEnd: "",
       price: "",
@@ -368,12 +324,12 @@ const Modals = ({
                 <box-icon name="home"></box-icon>
 
                 <select
-                  name="location"
-                  id="location"
+                  name="provinces"
+                  id="provinces"
                   onChange={handleChange}
-                  value={formData.location}
+                  value={formData.provinces}
                   className={`outline-none appearance-none border rounded w-full py-2 px-3 leading-tight focus:outline-none focus:shadow-outline ${
-                    errors.location ? "border-red-500" : ""
+                    errors.provinces ? "border-red-500" : ""
                   }`}
                 >
                   <option value="">Ubicación</option>
@@ -399,6 +355,39 @@ const Modals = ({
                 </span>
               )}
             </div>
+
+            <div>
+            <label className="flex items-center px-[10px] py-[5px] bg-[white] rounded-[20px]">
+              <box-icon name="map"></box-icon>
+              <select
+                id="cities"
+                value={formData.cities}
+                onChange={handleChange}
+                name="cities"
+                className="w-[225px] outline-none"
+              >
+                <option value="" disabled selected>
+                  Selecciona una localidad
+                </option>
+                {cities.map((localidad) => (
+                  <option value={localidad.name} key={localidad.id}>
+                    {localidad.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
             <div>
               <label
                 htmlFor="datesAvailable"
