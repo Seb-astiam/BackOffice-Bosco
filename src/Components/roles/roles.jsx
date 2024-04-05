@@ -3,7 +3,7 @@ import axios from "axios";
 import Modal from "react-modal";
 import Swal from "sweetalert2";
 
-export const Services = () => {
+const  Roles= () => {
   const [services, setServices] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newServiceName, setNewServiceName] = useState({ type: "" });
@@ -13,15 +13,16 @@ export const Services = () => {
   const [servicesPerPage] = useState(10);
 
   useEffect(() => {
-    fetchServices();
+    fetchTypes();
   }, [currentPage]);
 
-  const fetchServices = async () => {
+  const fetchTypes = async () => {
     try {
-      const response = await axios.get(
-        `/service/allServices?page=${currentPage}&limit=${servicesPerPage}`
+      const {data} = await axios.get(
+        `/role/allRoles?page=${currentPage}&limit=${servicesPerPage}`
       );
-      setServices(response.data);
+      setServices(data);
+      console.log(data)
     } catch (error) {
       console.error("Algo falló en la petición a mi Backend", error);
     }
@@ -35,23 +36,48 @@ export const Services = () => {
     });
   };
 
+
+
   const handleDelete = async (id) => {
     try {
-      const response = await axios.delete(`/service/${id}`);
-      if (response.status === 200) {
-        setServices((prevServices) =>
-          prevServices.filter((service) => service.id !== id)
-        );
-        Swal.fire({
-          icon: "success",
-          title: "¡Servicio Eliminado!",
-          text: "El servicio Se ha eliminado.",
-        });
+      const result = await Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción no se puede deshacer",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar",
+      });
+  
+      if (result.isConfirmed) {
+        const response = await axios.delete(`/role/role/${id}`);
+        if (response.status === 200) {
+          setServices((prevServices) =>
+            prevServices.filter((service) => service.id !== id)
+          );
+          Swal.fire({
+            icon: "success",
+            title: "¡Rol Eliminado!",
+            text: "El Rol Se ha eliminado.",
+          });
+        }
       }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+
+
+
+
+
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,26 +85,26 @@ export const Services = () => {
       let response;
       if (actionType === "create") {
         response = await axios.post(
-          `/service/newService`,
+          `/role/newRole`,
           newServiceName
         );
         Swal.fire({
           icon: "success",
           title: "¡Registro Exitoso!",
-          text: "El servicio ha sido registrado correctamente.",
+          text: "El Rol ha sido registrado correctamente.",
         });
       } else if (actionType === "update") {
         response = await axios.put(
-          `/service/${selectedService.id}`,
+          `/role/role/${selectedService.id}`,
           newServiceName
         );
         Swal.fire({
           icon: "success",
           title: "¡Registro Exitoso!",
-          text: "El servicio ha sido Actualizado correctamente.",
+          text: "El Rol ha sido Actualizado correctamente.",
         });
       }
-      fetchServices();
+      fetchTypes();
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -94,10 +120,10 @@ export const Services = () => {
     setActionType(type);
     if (type === "update" && service) {
       setSelectedService(service);
-      setNewServiceName({ type: service.type });
+      setNewServiceName({ name: service.name });
     } else {
       setSelectedService(null);
-      setNewServiceName({ type: "" });
+      setNewServiceName({ name: "" });
     }
     setIsModalOpen(true);
   };
@@ -118,7 +144,7 @@ export const Services = () => {
         <thead>
           <tr>
             <th className="px-4 py-2">ID</th>
-            <th className="px-4 py-2">Nombre del Servicio</th>
+            <th className="px-4 py-2">Nombre del Rol</th>
             <th className="px-4 py-2">Acciones</th>
           </tr>
         </thead>
@@ -126,7 +152,7 @@ export const Services = () => {
           {currentServices.sort((a, b) =>   b.id-a.id).map((service) => (
             <tr key={service.id}>
               <td className="border px-2 py-1">{service.id}</td>
-              <td className="border px-2 py-1">{service.type}</td>
+              <td className="border px-2 py-1">{service.name}</td>
               <td className="border px-2 py-1">
                 <button
                   className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mr-2 rounded"
@@ -156,7 +182,7 @@ export const Services = () => {
         className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         onClick={() => openModal("create")}
       >
-        Crear servicio
+        Crear Rol
       </button>
 
       <div className="flex justify-center mt-4">
@@ -227,8 +253,8 @@ export const Services = () => {
             <input
               className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"
               type="text"
-              name="type"
-              value={newServiceName.type}
+              name="name"
+              value={newServiceName.name}
               onChange={handleChange}
             />
             <button
@@ -243,5 +269,4 @@ export const Services = () => {
     </div>
   );
 };
-
-
+ export default Roles;
