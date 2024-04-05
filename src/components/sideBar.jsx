@@ -276,6 +276,7 @@ export const SideBar = () => {
     payments: false,
     reportes_housin: false,
     tiposalojamiento: false,
+    roles:false,
   });
 
   const toggleSubMenu = (submenu) => {
@@ -327,19 +328,14 @@ export const SideBar = () => {
                 to="/usuarios/registro"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
-                Registro Usuario
+                Crear Usuario
               </Link>
             </li>
-            <li>
-              <Link
-                to="/usuarios/panel-de-usuario"
-                className="block py-2 px-12 hover:bg-gray-700"
-              >
-                Panel de Usuario
-              </Link>
-            </li>
+            
           </ul>
         </li>
+
+        
         <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
@@ -355,7 +351,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/alojamientos/ver"
+                to="/usuarios/alojamientos/ver"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Ver Alojamientos
@@ -406,7 +402,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/reservas/ver"
+                to="/usuarios/reservas/ver"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Ver Reservas
@@ -446,6 +442,30 @@ export const SideBar = () => {
         <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
+            onClick={() => toggleSubMenu("roles")}
+          >
+            <FontAwesomeIcon icon={faUsers} className="mr-2" />
+            Roles
+          </span>
+          <ul
+            className={`submenu ${subMenuState.roles ? "block" : "hidden"}`}
+          >
+            <li>
+              <Link
+                to="/operations/roles"
+                className="block py-2 px-12 hover:bg-gray-700"
+              >
+               Aministrar Roles
+              </Link>
+            </li>
+            
+            
+            
+          </ul>
+        </li>
+        <li>
+          <span
+            className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
             onClick={() => toggleSubMenu("servicios")}
           >
             <FontAwesomeIcon icon={faBriefcase} className="mr-2" />
@@ -456,7 +476,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/services/operations"
+                to="/usuarios/services/operations"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Operaciones Servicios
@@ -464,7 +484,7 @@ export const SideBar = () => {
             </li>
             <li>
               <Link
-                to="/servicios/reportes"
+                to="/usuarios/servicios/reportes"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Reportes
@@ -486,8 +506,8 @@ export const SideBar = () => {
             }`}
           >
             <li>
-              <Link to="/" className="block py-2 px-12 hover:bg-gray-700">
-                Crear tipos
+              <Link to="/operations/types" className="block py-2 px-12 hover:bg-gray-700">
+                Operaciones  Tipos
               </Link>
             </li>
           </ul>

@@ -5,6 +5,7 @@ const initialState = {
   AllLocation: [],
   AllService: [],
   allAlojamientos: [],
+  AllCities: [],
 };
 
 const boscoSlice = createSlice({
@@ -25,9 +26,12 @@ const boscoSlice = createSlice({
       state.allAlojamientos = action.payload;
      
   },
+  getAllCities (state, action) {
+    state.AllCities = action.payload
+  },
   },
 });
 
-export const { getAllUsers,getAllLocation, getAllService,  getAllAlojamientos } = boscoSlice.actions;
+export const { getAllUsers, getAllLocation, getAllService,  getAllAlojamientos ,getAllCities} = boscoSlice.actions;
 
 export default boscoSlice.reducer;

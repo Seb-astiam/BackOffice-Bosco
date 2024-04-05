@@ -48,9 +48,9 @@ const OcupancyReport = () => {
               <div className="flex items-center space-x-2">
                 <select
                   onChange={handleChange}
-                  name="location"
+                  name="provinces"
                   className="py-2 px-4 rounded-lg border border-gray-300"
-                  value={searchQuery.location || ""}
+                  value={searchQuery.provinces  || ""}
                 >
                   <option value="">Escoge una Ubicación</option>
                   {provincias.map((provincia) => (

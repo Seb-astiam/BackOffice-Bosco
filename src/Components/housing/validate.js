@@ -4,7 +4,7 @@ export const ValidateFormdata = (formdata) => {
     datesAvailable,
     datesEnd,
     images,
-    location,
+    provinces,
     price,
     services,
     square,
@@ -18,8 +18,8 @@ export const ValidateFormdata = (formdata) => {
   if (!title) {
     errors.title = "El nombre del alojamiento es requerido";
   }
-  if (!location) {
-    errors.location = "La ubicación es requerida";
+  if (!provinces) {
+    errors.provinces = "La ubicación es requerida";
   }
 
   if (!datesAvailable || !datesEnd) {
