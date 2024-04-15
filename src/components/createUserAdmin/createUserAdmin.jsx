@@ -1,87 +1,108 @@
-import { useState } from "react";
-import { RiUser3Line, RiMailLine, RiLock2Line  } from "@remixicon/react";
-import { isValidUsername, isValidEmail, isValidPassword, isValidPasswordConfirmation } from "./validacionesUserAdmin";
-import Swal from 'sweetalert2'
-import axios from "axios";
 
+import React, { useState, useEffect } from "react";
+import { RiUser3Line, RiMailLine, RiLock2Line, RiTeamLine } from "@remixicon/react";
+import Swal from 'sweetalert2';
+import axios from "axios";
+import { isValidUsername, isValidEmail, isValidPassword, isValidPasswordConfirmation, isValidRoleSelection } from "./validacionesUserAdmin";
 
 export const CreateUserAdmin = () => {
+    useEffect(() => {
+        fetchRoles();
+    }, []);
+
+    const fetchRoles = async () => {
+        try {
+            const { data } = await axios.get("/role/allRoles");
+            setRoles(data);
+        } catch (error) {
+            console.error("Algo falló en la petición a mi Backend", error);
+        }
+    };
+
+    const [roles, setRoles] = useState([]);
     const [input, setInput] = useState({
         name: "",
-        email: "", 
-        password: "", 
-        passwordConfirmation: ""
+        email: "",
+        password: "",
+        passwordConfirmation: "",
+        selectedRoleId: "",
     });
 
     const [inputError, setInputError] = useState({
-
-        name: { valid: false, error: '' },
-        email: { valid: false, error: '' },
-        password: { valid: false, error: '' },
-        passwordConfirmation: { valid: false, error: '' }
-    
+        name: { valid: true, error: '' },
+        email: { valid: true, error: '' },
+        password: { valid: true, error: '' },
+        passwordConfirmation: { valid: true, error: '' },
+        selectedRoleId: { valid: true, error: '' }
     });
 
-    const handleChange = async (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
+        setInput(prevInput => ({
+            ...prevInput,
+            [name]: value
+        }));
+        // Validar en tiempo real al cambiar los valores de entrada
+        validateInput(name, value);
+    }
 
-        if(name === "name"){
-            const { valid, error } = isValidUsername(value);
-            setInputError(inputError => ({
-                ...inputError, name: { valid, error }
-            }));
-            setInput(prevInput => ({
-                ...prevInput, [name]: value
-            }));
-        }
-
-        if (name === "email") {
-            const { valid, error } = await isValidEmail(value);
-            setInputError(inputError => ({
-                ...inputError, email: { valid, error }
-            }));
-            setInput(prevInput => ({
-                ...prevInput, [name]: value
-            }));
-        }
-
-        if (name === "password") {
-            const { valid, error } = isValidPassword(value);
-            setInputError(inputError => ({
-                ...inputError, password: { valid, error }
-            }));
-            setInput(prevInput => ({
-                ...prevInput, [name]: value
-            }));
-        }
-
-        if (name === "passwordConfirmation") {
-            const { valid, error } = isValidPasswordConfirmation(input.password, value);
-            setInputError(inputError => ({
-                ...inputError, passwordConfirmation: { valid, error }
-            }));
-            setInput(prevInput => ({
-                ...prevInput, [name]: value
-            }));
+    const validateInput = (name, value) => {
+        switch (name) {
+            case "name":
+                setInputError(prevInputError => ({
+                    ...prevInputError,
+                    name: isValidUsername(value)
+                }));
+                break;
+            case "email":
+                isValidEmail(value).then(result =>
+                    setInputError(prevInputError => ({
+                        ...prevInputError,
+                        email: result
+                    }))
+                );
+                break;
+            case "password":
+                setInputError(prevInputError => ({
+                    ...prevInputError,
+                    password: isValidPassword(value)
+                }));
+                break;
+            case "passwordConfirmation":
+                setInputError(prevInputError => ({
+                    ...prevInputError,
+                    passwordConfirmation: isValidPasswordConfirmation(input.password, value)
+                }));
+                break;
+                case "selectedRoleId":
+                    setInputError(prevInputError => ({
+                        ...prevInputError,
+                        selectedRoleId: value ? { valid: true, error: '' } : { valid: false, error: '*Debe seleccionar un rol' }
+                    }));
+                    break;
+            default:
+                break;
         }
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const isValid = Object.values(inputError).every(field => field.valid);
-      
-        if (!isValid) {
-          window.alert('Por favor, complete todos los campos correctamente antes de enviar.');
-          return;
+        // Verificar si hay algún error de validación
+        const hasError = Object.values(inputError).some(error => !error.valid);
+
+        if (hasError) {
+            return;
         }
 
         try {
-            const responseBack = await axios.post("/user", input, {
-              headers: {
-                'Content-Type': 'application/json',
-              },
-        
+            const responseBack = await axios.post("/userAdmin", {
+                ...input,
+                selectedRoleId: parseInt(input.selectedRoleId)
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
 
             Swal.fire({
@@ -90,11 +111,11 @@ export const CreateUserAdmin = () => {
                 title: responseBack.data,
                 showConfirmButton: false,
                 timer: 1500
-              });
-  
-          } catch (error) {
-            window.alert('Error al crear usuario')
-          }
+            });
+
+        } catch (error) {
+            window.alert('Error al crear usuario');
+        }
     }
 
     const handleClear = () => {
@@ -102,56 +123,81 @@ export const CreateUserAdmin = () => {
             name: "",
             email: "",
             password: "",
-            passwordConfirmation: ""
+            passwordConfirmation: "",
+            selectedRoleId: "",
         });
 
         setInputError({
-            name: { valid: false, error: '' },
-            email: { valid: false, error: '' },
-            password: { valid: false, error: '' },
-            passwordConfirmation: { valid: false, error: '' }
+            name: { valid: true, error: '' },
+            email: { valid: true, error: '' },
+            password: { valid: true, error: '' },
+            passwordConfirmation: { valid: true, error: '' },
+            selectedRoleId: { valid: true, error: '' }
         });
     }
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 h-[80%] w-[70%] flex flex-col gap-3 items-center justify-center">
+        <div className="flex flex-col min-w-screen min-h-screen bg-gray-100 px-20 mt-2 ">
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-auto ">
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <RiUser3Line className="mr-2" />
+                        <input placeholder="Nombre" name="name" value={input.name} onChange={handleChange} className="input-field" />
+                    </div>
+                    <p className="text-red-500 text-xs italic">{inputError.name.error}</p>
+                </div>
 
-            <h1 className="text-3xl font-serif w-[400px] text-center bg-blue-100 shadow mb-5 p-2 rounded">Formulario para registrar usuarios</h1>
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <RiMailLine className="mr-2" />
+                        <input placeholder="Correo" name="email" value={input.email} onChange={handleChange} className="input-field" />
+                    </div>
+                    <p className="text-red-500 text-xs italic">{inputError.email.error}</p>
+                </div>
 
-        <div className="mb-4">
-            <label className="flex items-center">
-                <RiUser3Line className="mr-2" />
-                <input placeholder="Nombre" name="name" value={input.name} onChange={handleChange} className="border-b-2 border-gray-300 hover:scale-105 focus:border-blue-500 focus:outline-none" />
-            </label>
-            <p className="text-red-500 text-xs italic">{inputError.name.error}</p>
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <RiLock2Line className="mr-2" />
+                        <input placeholder="Contraseña" type="password" name="password" value={input.password} onChange={handleChange} className="input-field" />
+                    </div>
+                    <p className="text-red-500 text-xs italic">{inputError.password.error}</p>
+                </div>
+
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <RiLock2Line className="mr-2" />
+                        <input placeholder="Repetir contraseña" type="password" name="passwordConfirmation" value={input.passwordConfirmation} onChange={handleChange} className="input-field" />
+                    </div>
+                    <p className="text-red-500 text-xs italic">{inputError.passwordConfirmation.error}</p>
+                </div>
+
+                <div className="mb-4">
+                    <div className="flex items-center">
+                        <RiTeamLine className="mr-2" />
+                        <select
+                            id="selectedRoleId"
+                            value={input.selectedRoleId}
+                            name="selectedRoleId"
+                            className="input-field"
+                            onChange={handleChange}
+                        >
+                            <option value="" disabled>Selecciona un Rol</option>
+                            {roles.map((rol) => (
+                                <option value={rol.id} key={rol.id}>
+                                    {rol.name}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <p className="text-red-500 text-xs italic">{inputError.selectedRoleId.error}</p>
+                </div>
+
+                <div className="flex justify-between">
+                    <button type="button" onClick={handleClear} className="btn-secondary">Limpiar</button>
+                    <button type="submit" onClick={handleSubmit} className={`btn-primary ${!Object.values(inputError).some(error => !error.valid) && input.selectedRoleId !== "" ? "" : "opacity-50 cursor-not-allowed"}`} disabled={Object.values(inputError).some(error => !error.valid) || input.selectedRoleId === ""}>Registrar</button>
+
+                </div>
+            </div>
         </div>
-
-        <div className="mb-4">
-            <label className="flex items-center">
-                <RiMailLine className="mr-2" />
-                <input placeholder="Correo" name="email" value={input.email} onChange={handleChange} className="border-b-2 border-gray-300 hover:scale-105 focus:border-blue-500 focus:outline-none" />
-            </label>
-            <p className="text-red-500 text-xs italic">{inputError.email.error}</p>
-        </div>
-
-        <div className="mb-4">
-            <label className="flex items-center">
-                <RiLock2Line className="mr-2" />
-                <input placeholder="Contraseña" type="password" name="password" value={input.password} onChange={handleChange} className="border-b-2 hover:scale-105 border-gray-300 focus:border-blue-500 focus:outline-none" />
-            </label>
-            <p className="text-red-500 text-xs italic">{inputError.password.error}</p>
-        </div>
-
-        <div className="mb-4">
-            <label className="flex items-center">
-                <RiLock2Line className="mr-2" />
-                <input placeholder="Repetir contraseña" type="password" name="passwordConfirmation" value={input.passwordConfirmation} onChange={handleChange} className="border-b-2 hover:scale-105 border-gray-300 focus:border-blue-500 focus:outline-none" />
-            </label>
-            <p className="text-red-500 text-xs italic">{inputError.passwordConfirmation.error}</p>
-        </div>
-
-        <button type="button" onClick={handleClear} className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Limpiar</button>
-        <button type="submit" className="bg-gray-800 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Registrar</button>
-    </form>
-    )
+    );
 }

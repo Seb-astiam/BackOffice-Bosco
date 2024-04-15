@@ -7,7 +7,7 @@ import { ValidateFormdata } from "./validate";
 import { useLocationProvincias } from "../../hooks/useLocationProvincias";
 import { useServices } from "../../hooks/useServices";
 import useCities from "../../hooks/useCities";
-// import { useAlojamiento } from "../../hooks/useAlojamiento";
+import { useLocalStorage } from '../../hooks/useLocalStorage';
 
 import { useSelector } from "react-redux";
 
@@ -18,35 +18,34 @@ const Modals = ({
   reloadHousingsData,
   selectedHousing,
 }) => {
+
+  const [loggedInUser, setLoggedInUser] = useLocalStorage('loggedInUser', null);
   const [selectedHousingData, setSelectedHousingData] = useState(null);
   const statehousings = useSelector((state) => state.storage.allAlojamientos);
-  const result=statehousings.find((re)=> re.id === selectedHousing)
+  const result = statehousings.find((re) => re.id === selectedHousing);
 
   console.log("Selected Housing:", result);
-  
+
   useEffect(() => {
     if (actionType === "edit" && result) {
-      const selectedServiceIds = result.Services.map(
-        (service) => service.id
-      );
+      const selectedServiceIds = result.Services.map((service) => service.id);
       const imagenClou = result.images.map((image) => image);
-;
       setFormData({
-        id:  result.id,
-        title:  result.title,
+        id: result.id,
+        title: result.title,
         provinces: result.provinces,
         cities: result.cities,
-        location:  result.location,
-        datesAvailable:  result.datesAvailable,
-        datesEnd:  result.datesEnd,
-        price:  result.price,
-        accommodationType:  result.accommodationType,
-        square:  result.square,
+        location: result.location,
+        datesAvailable: result.datesAvailable,
+        datesEnd: result.datesEnd,
+        price: result.price,
+        accommodationType: result.accommodationType,
+        square: result.square,
         images: imagenClou,
         services: selectedServiceIds,
       });
     }
-  }, [ result]);
+  }, [result]);
 
   // useEffect(() => {
   //   if (actionType === "edit" && selectedHousingData) {
@@ -59,11 +58,10 @@ const Modals = ({
   useCities();
   const provincias = useSelector((state) => state.storage.AllLocation);
   const servicesA = useSelector((state) => state.storage.AllService);
-  
 
-  const email = "Hectortrivia1@gmail.com"; //ACA ESTAS
+  const email = loggedInUser; //ACA ESTAS
   const [formData, setFormData] = useState({
-    id:'',
+    id: "",
     title: "",
     provinces: "",
     cities: "",
@@ -85,12 +83,11 @@ const Modals = ({
 
   const [errors, setErrors] = useState({});
 
- 
   const handleChange = (e) => {
     const { name, files, type, checked } = e.target;
-  
+
     let newValue;
-  
+
     if (name === "images") {
       // Para el campo de imágenes, manejamos los archivos por separado
       newValue = [
@@ -106,25 +103,25 @@ const Modals = ({
       // Para otros tipos de campos, simplemente usamos el valor del campo
       newValue = e.target.value;
     }
-  
+
     // Actualizamos el estado de formData con el nuevo valor
     setFormData((prevData) => ({
       ...prevData,
       [name]: newValue,
     }));
-  
+
     // Realizamos la validación del formulario
     const validationErrors = ValidateFormdata({
       ...formData,
       [name]: newValue,
     });
     setErrors(validationErrors);
-  
+
     // Determinamos si se deben deshabilitar los botones de envío basándonos en los errores de validación
     const errorMessages = Object.values(validationErrors);
     setDisableSubmit(errorMessages.some((ermsg) => ermsg !== ""));
   };
-  
+
   const handleServiceChange = (e) => {
     const { value, checked } = e.target;
     const serviceId = parseInt(value);
@@ -147,45 +144,47 @@ const Modals = ({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
- 
 
-    
+    // Verificar si hay nuevas imágenes seleccionadas por el usuario
+    const newImagesSelected = formData.images.some(
+      (image) => typeof image !== "string"
+    );
+    console.log("¿Nuevas imágenes seleccionadas?", newImagesSelected);
 
-   // Verificar si hay nuevas imágenes seleccionadas por el usuario
-const newImagesSelected = formData.images.some(image => typeof image !== 'string');
-console.log('¿Nuevas imágenes seleccionadas?', newImagesSelected);
+    // Crear un nuevo objeto FormData
+    const formDataTo = new FormData();
 
-// Crear un nuevo objeto FormData
-const formDataTo = new FormData();
+    // Recorrer todas las claves y valores del estado formData
+    for (const [key, value] of Object.entries(formData)) {
+      console.log("Clave:", key, "Valor:", value);
+      if (key === "images" && newImagesSelected) {
+        // Si hay nuevas imágenes seleccionadas, agregarlas al FormData
+        console.log("Agregando nuevas imágenes al FormData:", value);
+        value.forEach((image) => formDataTo.append("images", image));
+      } else if (key === "Services") {
+        // Convertir los IDs de los servicios a una cadena JSON y agregarlos al FormData
+        console.log(
+          "Convirtiendo IDs de servicios a JSON y agregándolos al FormData:",
+          value
+        );
+        const serviceIds = value.map((service) => service.id);
+        formDataTo.append("ServiceIds", JSON.stringify(serviceIds));
+      } else {
+        // De lo contrario, agregar la clave y el valor al FormData
+        console.log("Agregando clave y valor al FormData:", key, value);
+        formDataTo.append(key, value);
+      }
+    }
 
-// Recorrer todas las claves y valores del estado formData
-for (const [key, value] of Object.entries(formData)) {
-  console.log('Clave:', key, 'Valor:', value);
-  if (key === "images" && newImagesSelected) {
-    // Si hay nuevas imágenes seleccionadas, agregarlas al FormData
-    console.log('Agregando nuevas imágenes al FormData:', value);
-    value.forEach(image => formDataTo.append("images", image));
-  } else if (key === "Services") {
-    // Convertir los IDs de los servicios a una cadena JSON y agregarlos al FormData
-    console.log('Convirtiendo IDs de servicios a JSON y agregándolos al FormData:', value);
-    const serviceIds = value.map(service => service.id);
-    formDataTo.append("ServiceIds", JSON.stringify(serviceIds));
-  } else {
-    // De lo contrario, agregar la clave y el valor al FormData
-    console.log('Agregando clave y valor al FormData:', key, value);
-    formDataTo.append(key, value);
-  }
-}
-
-console.log('FormData después de la configuración:', formDataTo);
- try {
+    console.log("FormData después de la configuración:", formDataTo);
+    try {
       let response;
 
       if (actionType === "create") {
-        console.log('Creating housing:',formDataTo );
+        console.log("Creating housing:", formDataTo);
         response = await axios.post(
           `/profileHousing/register?email=${email}`,
-          formDataTo 
+          formDataTo
         );
         if (
           response.status === 201 &&
@@ -199,38 +198,24 @@ console.log('FormData después de la configuración:', formDataTo);
           reloadHousingsData();
           clearFormData();
         }
-
-        
-      } 
-   if (actionType === "edit" ) {
-       
-        
-        const  response1 = await axios.put(
-          `/profileHousing/update/${result.id}`, formDataTo
-            
-          
-         
-        
-         
+      }
+      if (actionType === "edit") {
+        const response1 = await axios.put(
+          `/profileHousing/update/${result.id}`,
+          formDataTo
         );
 
-
-        if (
-          response1.status === 200 
-        ) {
+        if (response1.status === 200) {
           Swal.fire({
             icon: "success",
             title: "¡Registro Actualizado!",
             text: "Los datos del alojamiento han sido Actualizados correctamente.",
           });
           reloadHousingsData();
-         
         }
       }
 
-     
-
-      console.log('Response:', response);
+      console.log("Response:", response);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -239,8 +224,8 @@ console.log('FormData después de la configuración:', formDataTo);
   const clearFormData = () => {
     setFormData({
       title: "",
-     cities: "",
-     provinces:'',
+      cities: "",
+      provinces: "",
       datesAvailable: "",
       datesEnd: "",
       price: "",
@@ -357,36 +342,26 @@ console.log('FormData después de la configuración:', formDataTo);
             </div>
 
             <div>
-            <label className="flex items-center px-[10px] py-[5px] bg-[white] rounded-[20px]">
-              <box-icon name="map"></box-icon>
-              <select
-                id="cities"
-                value={formData.cities}
-                onChange={handleChange}
-                name="cities"
-                className="w-[225px] outline-none"
-              >
-                <option value="" disabled selected>
-                  Selecciona una localidad
-                </option>
-                {cities.map((localidad) => (
-                  <option value={localidad.name} key={localidad.id}>
-                    {localidad.name}
+              <label className="flex items-center px-[10px] py-[5px] bg-[white] rounded-[20px]">
+                <box-icon name="map"></box-icon>
+                <select
+                  id="cities"
+                  value={formData.cities}
+                  onChange={handleChange}
+                  name="cities"
+                  className="w-[225px] outline-none"
+                >
+                  <option value="" disabled selected>
+                    Selecciona una localidad
                   </option>
-                ))}
-              </select>
-            </label>
-          </div>
-
-
-
-
-
-
-
-
-
-
+                  {cities.map((localidad) => (
+                    <option value={localidad.name} key={localidad.id}>
+                      {localidad.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
 
             <div>
               <label
@@ -609,7 +584,6 @@ console.log('FormData después de la configuración:', formDataTo);
                     Previsualización de Imágenes:
                   </p>
                   <div className="flex">
-                    
                     {formData.images.map((image, index) => (
                       <div key={index} className="flex items-center mr-2">
                         <div className="relative">

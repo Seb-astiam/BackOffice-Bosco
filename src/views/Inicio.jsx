@@ -1,10 +1,10 @@
 import Nav from "../components/nav"
 import { SideBar } from "../components/sideBar";
 import { Users } from "../components/users";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes ,useNavigate,} from "react-router-dom";
 import { PanelUsuario } from "../components/panelUsuario";
 import { CreateUserAdmin } from "../components/createUserAdmin/createUserAdmin";
-
+import { useState ,useEffect} from "react";
 import { Detalle } from "./detalle";
 import Services2 from '../components/services/Services2'
 import OccupancyReport from "../components/housing/ocupancyReport";
@@ -17,10 +17,18 @@ import { useParams } from "react-router-dom";
 import HosuingTypes from "../components/housingtypes/housingTypes";
 import Roles from "../components/roles/roles";
 import Dashboard from "../components/dasboard/dashboard";
+import { useLocalStorage } from '../hooks/useLocalStorage';
+import Reservartion from "../components/reservation/reservations";
 export const Inicio = () => {
-  
+
+  const [loggedInUser, setLoggedInUser] = useLocalStorage('loggedInUser', null);
+  const navigate = useNavigate();
+  useEffect(() => {
+    !loggedInUser && navigate("/");
+  }, [loggedInUser]);
+
     return (
-      <div className='w-full h-[100vh] flex flex-col justify-start items-start' >
+      <div className='w-full h-[100vh] flex flex-col justify-start items-start  min-w-screen min-h-screen bg-gray-100 overflow-y-auto ' >
       
 
         <div className="flex w-full">
@@ -35,10 +43,13 @@ export const Inicio = () => {
               <Route path="/services/operations" element={<Services2 />} />
               <Route path="/alojamientos/ver" element={<Housings />} />
               <Route path="/ocupancy" element={<OccupancyReport/>} />
-              <Route path="/detail/:id" element={<UserPanel />} />
+              <Route path="/detail/:id/:email" element={<UserPanel />} />
               <Route path="/operations/types" element={<HosuingTypes />} />
               <Route path="/operations/roles" element={<Roles />} /> 
-              <Route path="/dashboard" element={<Dashboard />} /> 
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/reservas/ver" element={<Reservartion />} />
+                
+             
 
 
               

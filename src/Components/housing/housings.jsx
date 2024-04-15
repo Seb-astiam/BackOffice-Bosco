@@ -109,11 +109,11 @@ const Housings = () => {
   };
 
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto  min-w-screen  min-h-screen bg-gray-100">
       <div className="m-content">
         <div className="m-subheader">
           <div className="m-portlet__head-title">
-            <h3 className="m-portlet__head-text">Alojamientos</h3>
+            <h3 className="text-3xl mr-3 text-blue-900 font-serif">Alojamientos</h3>
             <div className="mb-20 flex flex-row items-center justify-between space-x-3">
   <select
     onChange={handleChange}
