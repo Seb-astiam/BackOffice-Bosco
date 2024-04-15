@@ -16,13 +16,16 @@ const UserPanel = () => {
   const [profile, setProfile] = useState('');
   const [housing, setHoising] = useState('');
   const [pet, setPet] = useState('');
-
-  const { id } = useParams();
-
+ const [reserva, setReserva]=useState('');
+  const { id ,email} = useParams();
+console.log(email);
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.post(`/userinfo/${id}`);
+       const  data2  = await axios.get(`/reservation/filtered?email=${email}`);
+        setReserva(data2.data);
+        console.log('reserva usuario',data2.data);
         setData(data);
         setProfile(data.Profile);
         setHoising(data.Housings);
@@ -37,6 +40,7 @@ const UserPanel = () => {
 console.log('soy ',data);
 console.log('hosuing',housing)
 console.log('PEts',pet)
+console.log('reserva usuario',reserva);
   return (
     <div className="w-full h-[100vh] flex flex-row flex-wrap mt-8 mr-4">
       <div className="w-full flex justify-around">
@@ -71,7 +75,7 @@ console.log('PEts',pet)
 
         <div className="overflow-hidden rounded px-8 pt-6 pb-8 mb-4 w-full">
   <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full">
-    <UserReservation/>
+    <UserReservation reserva={reserva}/>
   </div>
         </div>
   

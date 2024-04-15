@@ -1,15 +1,21 @@
-import { Route, Routes,useLocation } from "react-router-dom";
+import { Route, Routes,useLocation,    useNavigate, } from "react-router-dom";
 import  Login  from "./views/Login";
 import { Inicio } from "./views/Inicio";
 import Nav from "./components/nav";
 import Modal from 'react-modal';
-// import { PrivateRoute } from "./components/privateRoute";
-
+import { useLocalStorage } from './hooks/useLocalStorage';
+import { useState ,useEffect} from "react";
 
 Modal.setAppElement('#root');
 const App = () => {
+  const navigate = useNavigate();
+  const [loggedInUser, setLoggedInUser] = useLocalStorage('loggedInUser', null);
   const location = useLocation();
   const showNav = location.pathname !== '/';
+
+  useEffect(() => {
+    !loggedInUser && navigate("/");
+  }, [loggedInUser]);
   return (
     <div> 
        {showNav && <Nav />}
@@ -19,7 +25,7 @@ const App = () => {
       
         <Route path="*" element={<Inicio />} />
         
-     
+       
     
          
       </Routes>
@@ -31,3 +37,5 @@ const App = () => {
 }
 
 export default App;
+
+

@@ -232,10 +232,10 @@ const  HosuingTypes= () => {
               />
             </svg>
           </button>
-          <h2 className="text-lg font-bold mb-4">{actionType === "create" ? "Crear Servicio" : "Actualizar Servicio"}</h2>
+          <h2 className="text-lg font-bold mb-4">{actionType === "create" ? "Crear Alojamiento" : "Actualizar Alojamiento"}</h2>
           <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
             <label htmlFor="type" className="block text-sm font-bold">
-              Nombre del Servicio:
+              Nombre del Alojamiento:
             </label>
             <input
               className="border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:border-blue-500"

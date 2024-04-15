@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
-const UserReservation = ({ profile, iduser, email }) => {
+const UserReservation = ({reserva}) => {
+  
   const [isContentVisible, setIsContentVisible] = useState(false);
 
   const toggleContentVisibility = (e) => {
@@ -21,10 +22,45 @@ const UserReservation = ({ profile, iduser, email }) => {
               {isContentVisible && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <p className="text-sm font-medium text-gray-600 bg-gray-200">ID</p>
-                    <p>{iduser}</p>
+                  <div className="table-responsive">
+                <table className="w-full">
+  <thead>
+    <tr>
+      <th className="px-2 py-2 text-sm">ID</th>
+      <th className="px-2 py-2 text-sm">Estatus</th>
+      <th className="px-2 py-2 text-sm">Fecha de Inicio</th>
+      <th className="px-2 py-2 text-sm">Fecha de Fin</th>
+      <th className="px-2 py-2 text-sm">Precio</th>
+      <th className="px-2 py-2 text-sm">Provincia</th>
+      <th className="px-2 py-2 text-sm">Localidad</th>
+      <th className="px-2 py-2 text-sm">Usuario Alojamiento</th>
+      <th className="px-2 py-2 text-sm">Tipo de Alojamiento</th>
+      <th className="px-2 py-2 text-sm">Usuario Mascota</th>
+      <th className="px-2 py-2 text-sm">Nombre de la Mascota</th>
+    </tr>
+  </thead>
+  <tbody>
+    {reserva && reserva.map((reservaItem) => (
+        <tr key={reservaItem.id}>
+          <td className="border px-2 py-2 text-sm">{reservaItem.id}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.estatus}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.fechaInicio}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.fechaFin}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].price}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].provinces}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].cities}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].User.name}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].accommodationType}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.UserMascotum.User.name}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.UserMascotum.name}</td>
+        </tr>
+      ))} 
+  </tbody>
+</table>
+
+                </div>
                   </div>
-                  {/* Agrega aquí el resto del contenido */}
+                 
                 </div>
               )}
               {/* Botón para mostrar/ocultar contenido */}
