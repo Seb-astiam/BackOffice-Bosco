@@ -193,7 +193,7 @@ return (
           <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].cities}</td>
           <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].User.name}</td>
           <td className="border px-2 py-2 text-sm">{reservaItem.Housings[0].accommodationType}</td>
-          <td className="border px-2 py-2 text-sm">{reservaItem.UserMascotum.User.name}</td>
+          <td className="border px-2 py-2 text-sm">{reservaItem.UserMascotum.User?.name}</td>
           <td className="border px-2 py-2 text-sm">{reservaItem.UserMascotum.name}</td>
         </tr>
       ))}

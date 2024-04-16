@@ -418,7 +418,7 @@ export const SideBar = () => {
             </li>
           </ul>
         </li>
-        <li>
+        {/* <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
             onClick={() => toggleSubMenu("empresas")}
@@ -438,7 +438,7 @@ export const SideBar = () => {
               </Link>
             </li>
           </ul>
-        </li>
+        </li> */}
         <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
@@ -512,7 +512,7 @@ export const SideBar = () => {
             </li>
           </ul>
         </li>
-        <li>
+        {/* <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
             onClick={() => toggleSubMenu("payments")}
@@ -540,7 +540,7 @@ export const SideBar = () => {
               </Link>
             </li>
           </ul>
-        </li>
+        </li> */}
       </ul>
     </div>
   );
