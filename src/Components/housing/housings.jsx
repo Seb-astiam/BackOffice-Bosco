@@ -88,10 +88,10 @@ const Housings = () => {
     for (const [key, value] of Object.entries(searchQuery)) {
       if (value) query += `${key}=${value}&`;
     }
-  
     try {
       const { data } = await axios.get(`/profileHousing/filtered${query}`);
       dispatch(getAllAlojamientos(data));
+      console.log(data, "data")
     } catch (error) {
       console.log(error);
     }
@@ -117,9 +117,9 @@ const Housings = () => {
             <div className="mb-20 flex flex-row items-center justify-between space-x-3">
   <select
     onChange={handleChange}
-    name="location"
+    name="provinces"
     className="py-1 my-2 font-custom font-semibold w-4/5 rounded-lg border-solid border-2"
-    value={searchQuery.location || ""}
+    value={searchQuery.provinces || ""}
   >
     <option value="">Escoge una Ubicacion</option>
     {provincias.map((provincia) => {

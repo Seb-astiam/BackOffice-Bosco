@@ -22,8 +22,6 @@ const Modals = ({
   const statehousings = useSelector((state) => state.storage.allAlojamientos);
   const result=statehousings.find((re)=> re.id === selectedHousing)
 
-  console.log("Selected Housing:", result);
-  
   useEffect(() => {
     if (actionType === "edit" && result) {
       const selectedServiceIds = result.Services.map(
@@ -79,6 +77,7 @@ const Modals = ({
   useEffect(() => {
     console.table("Form Data:", formData);
   }, [formData]);
+  
   const selectedProvince = formData.provinces;
   const cities = useCities(selectedProvince ? selectedProvince : null);
   const [disableSubmit, setDisableSubmit] = useState(true);
@@ -153,26 +152,21 @@ const Modals = ({
 
    // Verificar si hay nuevas imágenes seleccionadas por el usuario
 const newImagesSelected = formData.images.some(image => typeof image !== 'string');
-console.log('¿Nuevas imágenes seleccionadas?', newImagesSelected);
 
 // Crear un nuevo objeto FormData
 const formDataTo = new FormData();
 
 // Recorrer todas las claves y valores del estado formData
 for (const [key, value] of Object.entries(formData)) {
-  console.log('Clave:', key, 'Valor:', value);
   if (key === "images" && newImagesSelected) {
     // Si hay nuevas imágenes seleccionadas, agregarlas al FormData
-    console.log('Agregando nuevas imágenes al FormData:', value);
     value.forEach(image => formDataTo.append("images", image));
   } else if (key === "Services") {
     // Convertir los IDs de los servicios a una cadena JSON y agregarlos al FormData
-    console.log('Convirtiendo IDs de servicios a JSON y agregándolos al FormData:', value);
     const serviceIds = value.map(service => service.id);
     formDataTo.append("ServiceIds", JSON.stringify(serviceIds));
   } else {
     // De lo contrario, agregar la clave y el valor al FormData
-    console.log('Agregando clave y valor al FormData:', key, value);
     formDataTo.append(key, value);
   }
 }
@@ -182,7 +176,6 @@ console.log('FormData después de la configuración:', formDataTo);
       let response;
 
       if (actionType === "create") {
-        console.log('Creating housing:',formDataTo );
         response = await axios.post(
           `/profileHousing/register?email=${email}`,
           formDataTo 
@@ -228,9 +221,6 @@ console.log('FormData después de la configuración:', formDataTo);
         }
       }
 
-     
-
-      console.log('Response:', response);
     } catch (error) {
       console.error("Error:", error);
     }
