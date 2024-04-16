@@ -28,7 +28,6 @@ const OcupancyReport = () => {
     }
 
     try {
-      console.log(query);
       const { data } = await axios.get(
         `/profileHousing/ocupancyreport${query}`
       );

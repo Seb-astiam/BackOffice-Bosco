@@ -287,9 +287,9 @@ export const SideBar = () => {
   };
 
   return (
-    <div className="sidebar bg-gray-800 text-white h-screen  w-100  flex flex-col">
+    <div className="sidebar bg-gray-800 text-white  min-h-full  w-100  flex flex-col ">
       <div className="sidebar-header py-4 px-6 text-xl font-bold">Menú</div>
-      <ul className="menu flex-grow">
+      <ul className="menu flex-grow overflow-y-auto">
         <li>
           <Link to="/dashboard" className="block py-3 px-6 hover:bg-gray-700">
             <FontAwesomeIcon icon={faCog} className="mr-2" />
@@ -375,7 +375,7 @@ export const SideBar = () => {
                     Ocupación por Ubicación
                   </Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/" className="block py-2 px-12 hover:bg-gray-700">
                     Ocupación por Fecha y Tipo
                   </Link>
@@ -384,7 +384,7 @@ export const SideBar = () => {
                   <Link to="/" className="block py-2 px-12 hover:bg-gray-700">
                     Ingresos por Tipo
                   </Link>
-                </li>
+                </li> */}
               </ul>
             </li>
           </ul>
@@ -402,7 +402,7 @@ export const SideBar = () => {
           >
             <li>
               <Link
-                to="/usuarios/reservas/ver"
+                to="/reservas/ver"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Ver Reservas
@@ -418,7 +418,7 @@ export const SideBar = () => {
             </li>
           </ul>
         </li>
-        <li>
+        {/* <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
             onClick={() => toggleSubMenu("empresas")}
@@ -438,7 +438,7 @@ export const SideBar = () => {
               </Link>
             </li>
           </ul>
-        </li>
+        </li> */}
         <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
@@ -512,7 +512,7 @@ export const SideBar = () => {
             </li>
           </ul>
         </li>
-        <li>
+        {/* <li>
           <span
             className="block py-3 px-6 cursor-pointer hover:bg-gray-700"
             onClick={() => toggleSubMenu("payments")}
@@ -528,7 +528,7 @@ export const SideBar = () => {
                 to="/payments/all"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
-                All
+                Mercado Pago
               </Link>
             </li>
             <li>
@@ -540,7 +540,7 @@ export const SideBar = () => {
               </Link>
             </li>
           </ul>
-        </li>
+        </li> */}
       </ul>
     </div>
   );

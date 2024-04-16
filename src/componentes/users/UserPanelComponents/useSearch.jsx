@@ -125,18 +125,42 @@ console.log(searchInput);
     </tr>
   </thead>
   <tbody> 
-    <tr key={searchResults.id} className="border-b">
-    <td className="border px-1 py-0.3 text-sm w-20 mt-0.5"><Link to={`/usuarios/detail/${searchResults.id}`}>{searchResults.id}</Link>
-</td>
-      <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{searchResults.name}</td>
-      <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{searchResults.email}</td>
-      <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">
-        <button type="button"  className=  { searchResults?.status === true ?"bg-green-500 text-white py-2 px-4 rounded-lg":"bg-red-500 text-white py-2 px-4 rounded-lg"}  data-toggle="modal" data-target="#lock-modal">
-           {  searchResults?.status === true ? 'ACTIVO': 'BLOQUEADO'}  
-        </button>
-      </td>
-    </tr>
-  </tbody>
+  {searchResults && (
+    Array.isArray(searchResults) ? (
+      searchResults.map((sr) => {
+        return (
+          <tr key={sr.id} className="border-b">
+            <td className="border px-1 py-0.3 text-sm w-20 mt-0.5" value={sr.id}>
+              <Link to={`/usuarios/detail/${sr.id}/${sr.email}`}>{sr.id}</Link>
+            </td>
+            <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{sr.name}</td>
+            <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{sr.email}</td>
+            <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">
+              <button type="button" className={sr.status ? "bg-green-500 text-white py-2 px-4 rounded-lg" : "bg-red-500 text-white py-2 px-4 rounded-lg"} data-toggle="modal" data-target="#lock-modal">
+                {sr.status ? 'ACTIVO' : 'BLOQUEADO'}
+              </button>
+            </td>
+          </tr>
+        );
+      })
+    ) : (
+      <tr key={searchResults.id} className="border-b">
+        <td className="border px-1 py-0.3 text-sm w-20 mt-0.5" value={searchResults.id}>
+          <Link to={`/usuarios/detail/${searchResults.id}/${searchResults.email}`}>{searchResults.id}</Link>
+        </td>
+        <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{searchResults.name}</td>
+        <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">{searchResults.email}</td>
+        <td className="border px-1 py-0.3 text-sm w-20 mt-0.5">
+          <button type="button" className={searchResults.status ? "bg-green-500 text-white py-2 px-4 rounded-lg" : "bg-red-500 text-white py-2 px-4 rounded-lg"} data-toggle="modal" data-target="#lock-modal">
+            {searchResults.status ? 'ACTIVO' : 'BLOQUEADO'}
+          </button>
+        </td>
+      </tr>
+    )
+  )}
+</tbody>
+
+
 </table>
 
   </div>
