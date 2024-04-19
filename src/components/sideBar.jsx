@@ -408,14 +408,14 @@ export const SideBar = () => {
                 Ver Reservas
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/reservas/reportes"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Reportes
               </Link>
-            </li>
+            </li> */}
           </ul>
         </li>
         {/* <li>
@@ -482,14 +482,14 @@ export const SideBar = () => {
                 Operaciones Servicios
               </Link>
             </li>
-            <li>
+            {/* <li>
               <Link
                 to="/usuarios/servicios/reportes"
                 className="block py-2 px-12 hover:bg-gray-700"
               >
                 Reportes
               </Link>
-            </li>
+            </li> */}
           </ul>
         </li>
         <li>
