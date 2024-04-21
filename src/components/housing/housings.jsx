@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { getAllAlojamientos } from "../../redux/boscoSlice";
 import { useLocationProvincias } from "../../hooks/useLocationProvincias";
+import { useTiposAlojamientos } from "../../hooks/useTiposAlojamientos";
 
 // import { useServices } from "../../hooks/useServices";
 
@@ -16,10 +17,12 @@ const Housings = () => {
   const dispatch = useDispatch();
   useAlojamiento();
   useLocationProvincias();
+  useTiposAlojamientos();
 
   const statehousings = useSelector((state) => state.storage.allAlojamientos);
   const provincias = useSelector((state) => state.storage.AllLocation);
   const services = useSelector((state) => state.storage.AllService);
+  const TiposHost = useSelector((state) => state.storage.TipoAlojamientos);
 
   useEffect(() => {
     setHousingData(statehousings);
@@ -91,7 +94,6 @@ const Housings = () => {
     try {
       const { data } = await axios.get(`/profileHousing/filtered${query}`);
       dispatch(getAllAlojamientos(data));
-      console.log(data, "data")
     } catch (error) {
       console.log(error);
     }
@@ -118,7 +120,7 @@ const Housings = () => {
   <select
     onChange={handleChange}
     name="provinces"
-    className="py-1 my-2 font-custom font-semibold w-4/5 rounded-lg border-solid border-2"
+    className="py-1 my-1 font-custom font-semibold w-4/5 rounded-lg border-solid border-2"
     value={searchQuery.provinces || ""}
   >
     <option value="">Escoge una Ubicacion</option>
@@ -132,24 +134,34 @@ const Housings = () => {
   </select>
   <label htmlFor="price" >Precio</label>
   <input
-    type="text"
-    placeholder="Buscar por Precio"
-    name="price"
-    value={searchQuery.price || ""}
+    type="number"
+    name="maxPrice"
+    id="maxPrice"
+    min={1000}
+    max="99000"
+    step="1000"
+    value={searchQuery.maxPrice || ""}
     onChange={handleChange}
     className="rounded-lg border px-4 py-2"
   />
   <select
-  onChange={handleChange}
-  name="accommodationType"
-  value={searchQuery.accommodationType || ""}
-  className="py-1 my-2 font-custom font-semibold w-4/5 rounded-lg border-solid border-2"
->
-  <option value="">Selecciona un tipo de alojamiento</option>
-  <option value="Cabaña">Cabaña</option>
-  <option value="Hotel">Hotel</option>
-  <option value="Casa Rural">Casa Rural</option>
-</select>
+      name="accommodationType"
+      id="accommodationType"
+      onChange={handleChange}
+      value={searchQuery.accommodationType}
+      className="w-[225px] outline-none"
+    >
+      <option value="" disabled selected>
+        Selecciona un tipo de alojamiento
+      </option>
+      {TiposHost.map((tipo) => {
+        return (
+          <option key={tipo.id} value={tipo.type}>
+            {tipo.type}
+          </option>
+        );
+      })}
+  </select>
    <label htmlFor="square" >Plazas</label>
   <input
     placeholder="Buscar por plazas"

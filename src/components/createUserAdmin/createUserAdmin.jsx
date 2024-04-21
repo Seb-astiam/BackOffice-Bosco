@@ -137,8 +137,10 @@ export const CreateUserAdmin = () => {
     }
 
     return (
-        <div className="flex flex-col min-w-screen min-h-screen bg-gray-100 px-20 mt-2 ">
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-auto ">
+        <div className="flex flex-wrap flex-col w-[100%] h-screen bg-gray-100 px-20 mt-2 content-center justify-center items-center">
+            <h2>Registro de Usuarios BackOficce</h2>
+
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 mr-auto">
                 <div className="mb-4">
                     <div className="flex items-center">
                         <RiUser3Line className="mr-2" />

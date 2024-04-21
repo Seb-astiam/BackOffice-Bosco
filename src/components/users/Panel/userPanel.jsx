@@ -8,24 +8,23 @@ import { useState, useEffect } from 'react';
 import UserHousing from "../UserPanelComponents/userHousing";
 import Userpets from "../UserPanelComponents/userpets";
 import UserReservation from "../UserPanelComponents/userReservation";
-import UserBilletera from "../UserPanelComponents/userBilletera";
-import UserModifications from "../UserPanelComponents/userModifications";
+// import UserBilletera from "../UserPanelComponents/userBilletera";
+// import UserModifications from "../UserPanelComponents/userModifications";
 
 const UserPanel = () => {
   const [data, setData] = useState('');
   const [profile, setProfile] = useState('');
   const [housing, setHoising] = useState('');
   const [pet, setPet] = useState('');
- const [reserva, setReserva]=useState('');
+  const [reserva, setReserva]=useState('');
   const { id ,email} = useParams();
-console.log(email);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const { data } = await axios.post(`/userinfo/${id}`);
        const  data2  = await axios.get(`/reservation/filtered?email=${email}`);
         setReserva(data2.data);
-        console.log('reserva usuario',data2.data);
         setData(data);
         setProfile(data.Profile);
         setHoising(data.Housings);
@@ -37,10 +36,7 @@ console.log(email);
 
     fetchData();
   }, [id]);
-console.log('soy ',data);
-console.log('hosuing',housing)
-console.log('PEts',pet)
-console.log('reserva usuario',reserva);
+
   return (
     <div className="w-full h-[100vh] flex flex-row flex-wrap mt-8 mr-4">
       <div className="w-full flex justify-around">
@@ -79,9 +75,7 @@ console.log('reserva usuario',reserva);
   </div>
         </div>
   
-
-
-        <div className="overflow-hidden rounded px-8 pt-6 pb-8 mb-4 w-full">
+        {/* <div className="overflow-hidden rounded px-8 pt-6 pb-8 mb-4 w-full">
   <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full">
     <UserBilletera/>
   </div>
@@ -92,7 +86,7 @@ console.log('reserva usuario',reserva);
   <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full">
     <UserModifications/>
   </div>
-        </div>
+        </div> */}
     </div>
   );
 };
