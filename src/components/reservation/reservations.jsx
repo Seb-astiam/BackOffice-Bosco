@@ -29,7 +29,6 @@ const Reservartion = ()=>{
   const handleChange = async (e) => {
     const { name, value } = e.target;
     setSearchQuery({ ...searchQuery, [name]: value });
-   console.log( "soy la query",searchQuery)
   };
   const handleSearch = async () => {
     let query = "?";
@@ -45,18 +44,9 @@ const Reservartion = ()=>{
       console.log(error);
     }
   };
-  console.log( "soy la reserva",reserva);
 
 
 return (   
- //  provinces,
-//   cities,
-//   price,
-//   startDate,
-//   endDate,
-//   estatus{
-
-
 <div className="overflow-x-auto  min-w-screen  min-h-screen bg-gray-100">
 
 <div className="m-subheader">
@@ -95,7 +85,7 @@ return (
     })}
   </select>
  
-  <div className="relative">
+  {/* <div className="relative">
   <label htmlFor="endDate" className="text-gray-900 absolute top-0 left-0 bg-white  px-2 ml-3 -mt-6" style={{ backgroundColor: 'transparent' }}>Desde</label>
   <input 
     type="date"
@@ -119,7 +109,7 @@ return (
     placeholder=" "
     style={{ WebkitAppearance: 'none' }} 
   />
-</div>
+</div> */}
 
   <select
   onChange={handleChange}
@@ -133,18 +123,17 @@ return (
   <option value="Reject">Rechazada</option>
 </select>
    <label htmlFor="price" >Precio</label>
-  <input placeholder="Buscar por precio"
+   <input
     type="number"
-    id="price"
-    name="price"
-    min="1"
-   
-     value={searchQuery.price || ""}
-     onChange={handleChange}
-    defaultValue={1}
+    name="maxPrice"
+    id="maxPrice"
+    min={1000}
+    max="99000"
+    step="1000"
+    value={searchQuery.maxPrice || ""}
+    onChange={handleChange}
     className="rounded-lg border px-4 py-2"
   />
-  
 
   <button
     className="btn btn-primary px-4 py-2 rounded-lg"
@@ -210,16 +199,3 @@ return (
 }
 
 export default Reservartion
-
-// ---------------------------------------------------------------------------------------------------------------------------------------------
-// | ID | Estatus    | Fecha de Inicio | Fecha de Fin | Precio | Provincia | Ciudad    | Usuario Alojamiento | Nombre Mascota | Usuario Mascota |
-// |----|------------|-----------------|--------------|--------|-----------|-----------|---------------------|----------------|-----------------|
-// | 1  | Confirmada | 2024-04-10      | 2024-04-15   | $50    | Barcelona | Barcelona | Maria               | Firulais       | Pedro           |
-// |    |            |                 |              |        |           |           |                     |                |                 |
-// | 2  | Pendiente  | 2024-05-01      | 2024-05-05   | $80    | Madrid    | Madrid    | Carlos              | Max            | Maria           |
-// ----------------------------------------------------------------------------------------------------------------------------------------------
-
-
-// ----Fecha inicio------
-// |                    | 
-// ----------------------                    

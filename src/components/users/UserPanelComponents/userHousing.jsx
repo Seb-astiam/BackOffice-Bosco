@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 const UserHousing = ({ housing }) => {
   const [isContentVisible, setIsContentVisible] = useState(false);
-  console.log(housing)
   const toggleContentVisibility = (e) => {
     e.preventDefault();
     setIsContentVisible(!isContentVisible);

@@ -16,7 +16,6 @@ const useCities = (provinceId) => {
                     name: city.nombre,
                 }));
                 dispatch(getAllCities(formattedCities));
-                console.log(formattedCities);
             } catch (error) {
                 console.error("Error al obtener ciudades de la provincia:", error);
             }

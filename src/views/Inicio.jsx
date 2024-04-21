@@ -33,7 +33,7 @@ export const Inicio = () => {
 
         <div className="flex w-full">
           <SideBar />
-          <div className="flex flex-col mr-4  w-full">
+          <div className="flex flex-col mr-4  w-full h-screen">
             <Routes>
               <Route path="/" element={<Users />} />
               <Route path="/panel-de-usuario" element={<PanelUsuario />} />
